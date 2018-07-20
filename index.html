@@ -1,0 +1,111 @@
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Link Shortener</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
+    <style>
+      @import url("https://fonts.googleapis.com/css?family=Montserrat:200");
+      :root {
+        --yellow: #ffc107;
+        --dark: #303030;
+        --breakpoint-xs: 0;
+        --breakpoint-sm: 576px;
+        --breakpoint-md: 768px;
+        --breakpoint-lg: 992px;
+        --breakpoint-xl: 1200px;
+        --font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+        --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+      html {
+        font-family: sans-serif;
+        line-height: 1.15;
+        -webkit-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
+        -ms-overflow-style: scrollbar;
+        -webkit-tap-highlight-color: transparent; }
+      .pb-5,.py-5 {
+        padding-bottom: 3.6rem !important; }    
+      .text-center {
+        text-align: center !important; }
+      .container {
+        width: 100%;
+        padding-right: 15px;
+        padding-left: 15px;
+        margin-right: auto;
+        margin-left: auto; }
+        @media (min-width: 576px) {
+          .container {
+            max-width: 540px; } }
+        @media (min-width: 768px) {
+          .container {
+            max-width: 720px; } }
+        @media (min-width: 992px) {
+          .container {
+            max-width: 960px; } }
+        @media (min-width: 1200px) {
+          .container {
+            max-width: 1140px; } }
+      .w-100 {
+        width: 100% !important; } 
+      body {
+        margin: 0;
+        font-family: Montserrat;
+        font-size: 0.85rem;
+        font-weight: 200;
+        line-height: 1.8;
+        color: #efefef;
+        text-align: left;
+        background-color: #111; }
+      .display-3 {
+        font-size: 4.5rem;
+        font-weight: 300;
+        line-height: 1.2; }
+      .lead {
+        font-size: 1.3rem;
+        font-weight: 300; }
+      .text-muted {
+        color: #6c757d !important; }
+      .btn-primary {
+        color: #212529;
+        background-color: #f1cd31;
+        border-color: #f1cd31; }
+      .btn-primary:hover {
+        color: #212529;
+        background-color: #ecc310;
+        border-color: #e0b90f; }
+      .btn-primary:focus, .btn-primary.focus {
+        box-shadow: 0 0 0 0.2rem rgba(241, 205, 49, 0.5); }
+      .btn-primary.disabled, .btn-primary:disabled {
+        color: #212529;
+        background-color: #f1cd31;
+        border-color: #f1cd31; }
+      .btn-primary:not(:disabled):not(.disabled):active, .btn-primary:not(:disabled):not(.disabled).active,
+      .show > .btn-primary.dropdown-toggle {
+        color: #212529;
+        background-color: #e0b90f;
+        border-color: #d4af0e; }
+      .btn-primary:not(:disabled):not(.disabled):active:focus, .btn-primary:not(:disabled):not(.disabled).active:focus,
+      .show > .btn-primary.dropdown-toggle:focus {
+        box-shadow: 0 0 0 0.2rem rgba(241, 205, 49, 0.5); }
+    </style>
+  </head>
+  <body>
+    <div class="py-5 text-center">
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <h1 class="display-3">Link Shortener</h1>
+            <p class="lead text-muted">It just works.<br></p>
+          </div>
+        </div>
+      </div>
+    </div>
+        <div class="py-5">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-12">
+                <form class="form-inline" action="/new" method="POST">
+                  <div class="input-group w-100">
+                    <input type="text" class="form-control text-center form-control-lg" placeholder="Paste Desired URL" required="required" name="targetUrl" id="targetUrl">
+                      <div class="input-group-append">
+                      <input class="btn btn-primary" type="submit" value="Shorten">
