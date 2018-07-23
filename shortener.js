@@ -62,9 +62,6 @@ app.post('/new', (req, res) => {
     const newText = text.replace('REPLACETHIS', `${conf.HOST}:${conf.PORT}/${queryRes}`);
     res.send(newText);
   });
-
-  // const htmlNew = htmlOld.replace('REPLACETHIS', queryRes);
-  // res.send(htmlNew);
 });
 
 app.get('/:shortId', (req, res) => {
