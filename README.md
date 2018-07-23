@@ -1,1 +1,3 @@
-# link-shortener
+# Link Shortener
+
+A simple link shortener
