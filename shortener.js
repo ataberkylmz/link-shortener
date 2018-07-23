@@ -5,7 +5,7 @@ const path = require('path');
 const LokiDB = require('lokijs');
 const rand = require('random-js');
 const fs = require('fs');
-const conf = require('./config.json');
+const conf = require('./config');
 
 const app = Express();
 let links;
@@ -66,12 +66,15 @@ app.post('/new', (req, res) => {
 
 app.get('/:shortId', (req, res) => {
   try {
-    const tryGet = links.findOne({ short: req.params.shortId });
-    if (!tryGet) {
+    const shortUrl = links.findOne({ short: req.params.shortId });
+    if (!shortUrl) {
       res.redirect(301, '/');
     } else {
-      const redirUrl = tryGet.url;
+      const redirUrl = shortUrl.url;
       console.log(redirUrl);
+      shortUrl.count += 1;
+      shortUrl.expire = Date.now() + 60 * 60 * 24 * 30;
+      links.update(shortUrl);
       res.redirect(302, `${redirUrl}`);
     }
   } catch (error) {
