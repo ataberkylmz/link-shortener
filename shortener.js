@@ -42,7 +42,6 @@ app.post('/new', (req, res) => {
   const tryGet = links.findOne({ url: mainUrl });
   if (tryGet) {
     // if it is shortened already, show the existing url.
-    // IMPLEMENT!
     console.log(`Short URL already exist in the database. ID: ${tryGet.short}`);
   } else {
     // If it is not shortened already, generate a new random string with a lenght of 4.
@@ -71,7 +70,7 @@ app.post('/new', (req, res) => {
   // the placeholder text with actual shorted url.
   fs.readFile(`${__dirname}/created.html`, 'utf8', (err, text) => {
     let newText;
-    if (!(conf.PORT === 80)) {
+    if (!(conf.PORT === 80 || conf.PORT === 3000)) {
       newText = text.replace('#REPLACETHIS#', `${conf.HOST}:${conf.PORT}/${queryRes.short}`);
     } else {
       newText = text.replace('#REPLACETHIS#', `${conf.HOST}/${queryRes.short}`);
@@ -85,12 +84,16 @@ app.post('/new', (req, res) => {
   });
 });
 
+// Processes the shorted links.
 app.get('/:shortId', (req, res) => {
   try {
+    // Tries to get the short url's original url from the db.
     const shortUrl = links.findOne({ short: req.params.shortId });
     if (!shortUrl) {
+      // If the link doesn't exist, redirect to homepage.
       res.redirect(301, '/');
     } else {
+      // If the link exists, increase its view count and expire date, then redirect to the targer.
       const redirUrl = shortUrl.url;
       console.log(redirUrl);
       shortUrl.count += 1;
@@ -104,6 +107,7 @@ app.get('/:shortId', (req, res) => {
   }
 });
 
+// For deletion request. Needs further implementation (UI).
 app.get('/d/:short/:s', (req, res) => {
   const secretCode = req.params.s;
   const shortId = req.params.short;
