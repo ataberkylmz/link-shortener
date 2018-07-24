@@ -87,6 +87,11 @@
       .btn-primary:not(:disabled):not(.disabled):active:focus, .btn-primary:not(:disabled):not(.disabled).active:focus,
       .show > .btn-primary.dropdown-toggle:focus {
         box-shadow: 0 0 0 0.2rem rgba(241, 205, 49, 0.5); }
+      .center {
+        margin: auto;
+        width: 100%;
+        padding: 10px;
+        text-align: center; }
     </style>
     <script>
       function copyURL() {
@@ -112,7 +117,12 @@
             <div class="row">
               <div class="col-md-12">
                   <div class="input-group w-100">
-                    <input type="text" class="form-control text-center form-control-lg" name="newURL" id="newURL" value="REPLACETHIS">
+                    <input type="text" class="form-control text-center form-control-lg" name="newURL" id="newURL" value="#REPLACETHIS#">
                       <div class="input-group-append">
                       <button class="btn btn-primary" type="button" onclick="copyURL()">Copy</button>
                       <input id="inp" class="btn btn-info" type="button" value="Back" onclick="location.href='/';" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+                    <label class="center lead">Your secret code is: #SECRETCODE#</label>

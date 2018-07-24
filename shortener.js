@@ -19,6 +19,7 @@ const db = new LokiDB('db', {
     }
   },
   autosave: true,
+  // Save the database every 4 seconds.
   autosaveInterval: 4000,
 });
 
@@ -48,18 +49,38 @@ app.post('/new', (req, res) => {
     // There should be 21381376 unique adress with lenght of 4.
     // If we use 3 charactes instead of 4, there should be 314432 unique combination.
     let shortUrlId = 'aaaa';
+    let shortUrlSecret = '123';
     do {
-      shortUrlId = rand.string('qwertyuopasdfghjklizxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890')(rand.engines.mt19937().autoSeed(), 4);
+      shortUrlId = rand.string(conf.GENPOOL)(rand.engines.mt19937().autoSeed(), conf.SHORTLENGTH);
+      shortUrlSecret = rand.string(conf.SCPOOL)(rand.engines.mt19937().autoSeed(),
+        conf.SECRETLENGTH);
     } while (links.findOne({ url: mainUrl }));
     links.insert({
       // Insert the newly generated url into the database with expiraton date of 1 month.
-      url: mainUrl, short: shortUrlId, count: 0, expire: Date.now() + 60 * 60 * 24 * 30,
+      url: mainUrl,
+      short: shortUrlId,
+      secret: shortUrlSecret,
+      count: 0,
+      expire: Date.now() + conf.EXIPRETIME,
     });
     console.log(`New shout created. Url id is ${shortUrlId}`);
   }
-  const queryRes = links.findOne({ url: mainUrl }).short;
+  // Get the shorted URL ID from the database.
+  const queryRes = links.findOne({ url: mainUrl });
+  // Read created.html from the file system then change
+  // the placeholder text with actual shorted url.
   fs.readFile(`${__dirname}/created.html`, 'utf8', (err, text) => {
-    const newText = text.replace('REPLACETHIS', `${conf.HOST}:${conf.PORT}/${queryRes}`);
+    let newText;
+    if (!(conf.PORT === 80)) {
+      newText = text.replace('#REPLACETHIS#', `${conf.HOST}:${conf.PORT}/${queryRes.short}`);
+    } else {
+      newText = text.replace('#REPLACETHIS#', `${conf.HOST}/${queryRes.short}`);
+    }
+    if (queryRes.count === 0) {
+      newText = newText.replace('#SECRETCODE#', queryRes.secret);
+    } else {
+      newText = newText.replace('#SECRETCODE#', 'The code only shown when view count is 0.');
+    }
     res.send(newText);
   });
 });
@@ -73,13 +94,30 @@ app.get('/:shortId', (req, res) => {
       const redirUrl = shortUrl.url;
       console.log(redirUrl);
       shortUrl.count += 1;
-      shortUrl.expire = Date.now() + 60 * 60 * 24 * 30;
+      shortUrl.expire = Date.now() + conf.EXIPRETIME;
       links.update(shortUrl);
       res.redirect(302, `${redirUrl}`);
     }
   } catch (error) {
-    console.error('Error while getting the url from the server.');
+    console.error('Error while getting the url from the server/db.');
     res.redirect(404, '');
+  }
+});
+
+app.get('/d/:short/:s', (req, res) => {
+  const secretCode = req.params.s;
+  const shortId = req.params.short;
+  const q = links.findOne({ short: shortId, secret: secretCode });
+
+  if (q) {
+    try {
+      links.remove(q);
+      console.log(`${q.url} is removed from the database.`);
+      res.redirect(301, '/');
+    } catch (error) {
+      console.log(error);
+      res.redirect(404, '');
+    }
   }
 });
 
